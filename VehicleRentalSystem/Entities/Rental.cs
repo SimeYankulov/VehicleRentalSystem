@@ -49,78 +49,83 @@
 
         }
 
-       
         public void PrintInfo()
+        { 
+            PrintBaseInfo();
+
+            PrintCosts();
+            
+            PrintTotals();
+            
+        }
+
+        private void PrintBaseInfo()
         {
-            /* 
-             * I know its a lot but i wanted the print functionalities to be in one 
-               function and i've created this monster..
-             */
             Console.WriteLine("XXXXXXXXXXX");
             Console.WriteLine("Date: " + Date.ToString("yyyy-MM-dd"));
             Console.WriteLine("Customer Name: " + Customer.GetName());
-            Console.WriteLine("Rented Vehicle: " + Vehicle.Brand + " " + Vehicle.Model+"\n");
-           
+            Console.WriteLine("Rented Vehicle: " + Vehicle.Brand + " " + Vehicle.Model + "\n");
+
             Console.WriteLine("Reservation start date: " + ReservationStartDate.ToString("yyyy-MM-dd"));
             Console.WriteLine("Reservation end date: " + ReservationEndDate.ToString("yyyy-MM-dd"));
             Console.WriteLine("Reserved rental days: " + ReservedRentalDays + "\n");
 
             Console.WriteLine("Actual return date: " + ActualReturnDate.ToString("yyyy-MM-dd"));
-            Console.WriteLine("Actual rental days: "+ ActualRentalDays + "\n");
-
-
+            Console.WriteLine("Actual rental days: " + ActualRentalDays + "\n");
+        }
+        private void PrintCosts()
+        {
             RentalCostPerDay = Vehicle.GetRentalCost(ActualRentalDays);
             Console.WriteLine("Rental cost per day: $" + RentalCostPerDay
                                                         .ToInvariantString());
 
             InsuranceCostPerDay = Vehicle.GetInsuranceCostPerDay();
-            
+
             //Gets the discounts 
             GetDiscount();
 
             //Whether there is a discount or addition it prints it out 
-            if(InsuranceDiscount > 0 || InsuranceAddition > 0)
+            if (InsuranceDiscount > 0 || InsuranceAddition > 0)
             {
                 Console.WriteLine("Initial Insurance per day: $" + InsuranceCostPerDay.ToInvariantString());
-                
-                if(InsuranceDiscount > 0) {
-                    
+
+                if (InsuranceDiscount > 0)
+                {
+
                     Console.WriteLine("Insurance discount per day: $" + InsuranceDiscount.ToInvariantString());
 
                 }
-                else if(InsuranceAddition > 0)
+                else if (InsuranceAddition > 0)
                 {
                     Console.WriteLine("Insurance addition per day: $" + InsuranceAddition.ToInvariantString());
 
                 }
             }
-       
-            Console.WriteLine("Insurance per day: $" + ActualInsurance.ToInvariantString()+ "\n");
-            
+
+            Console.WriteLine("Insurance per day: $" + ActualInsurance.ToInvariantString() + "\n");
+
             if (ActualReturnDate != ReservationEndDate)
             {
                 CalculateReturnDiscounts();
             }
             // Wheter there is rent or insurance deduction prints them out
-            if(RentDeduction > 0 || InsuranceDeduction > 0)
+            if (RentDeduction > 0 || InsuranceDeduction > 0)
             {
-                Console.WriteLine("Early return discount for rent: $"+RentDeduction.ToInvariantString());
-                Console.WriteLine("Early return discount for insurance: $"+InsuranceDeduction.ToInvariantString() + "\n");
+                Console.WriteLine("Early return discount for rent: $" + RentDeduction.ToInvariantString());
+                Console.WriteLine("Early return discount for insurance: $" + InsuranceDeduction.ToInvariantString() + "\n");
             }
 
-            CalcuateTotals();
-            
-            Console.WriteLine("Total rent: $" + TotalRent.ToInvariantString());
-            Console.WriteLine("Total Insurance: $"+ TotalInsurance.ToInvariantString());
-            Console.WriteLine("Total: $"+ Total.ToInvariantString());
-            Console.WriteLine("XXXXXXXXXXX");
         }
-
-        private void CalcuateTotals()
+        private void PrintTotals()
         {
             TotalRent = (ReservedRentalDays * RentalCostPerDay) - RentDeduction;
             TotalInsurance = (ReservedRentalDays * ActualInsurance) - InsuranceDeduction;
             Total = TotalRent + TotalInsurance;
+
+            Console.WriteLine("Total rent: $" + TotalRent.ToInvariantString());
+            Console.WriteLine("Total Insurance: $" + TotalInsurance.ToInvariantString());
+            Console.WriteLine("Total: $" + Total.ToInvariantString());
+            Console.WriteLine("XXXXXXXXXXX");
         }
 
         private int GetDifferenceInDays(DateTime reservationEndDate, DateTime reservationStartDate)
